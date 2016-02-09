@@ -25,6 +25,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'simple_form'
 
+#add user authentication using devise
+gem 'devise'
+
+# add Facebook authentication via Omniauth
+gem "omniauth-facebook"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
