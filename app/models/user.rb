@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+
+         has_many :posts, dependent: :destroy
+
   # differentiate whether user is new or existing
   def self.find_or_create_from_auth_hash(auth_hash)
   	find_by_auth_hash(auth_hash) || create_from_auth_hash(auth_hash)
@@ -13,13 +16,13 @@ class User < ActiveRecord::Base
   def self.find_by_auth_hash(auth_hash)
   	where(
   		provider: auth_hash.provider,
-  		uid: auth_hash.id
+  		uid: auth_hash.uid
   		).first
   end
 
   # if new user, store info to database
   def self.create_from_auth_hash(auth_hash)
-  	create(
+  	create!(
   		provider: auth_hash.provider,
   		uid: auth_hash.uid,
   		email: auth_hash.info.email,
@@ -41,5 +44,9 @@ class User < ActiveRecord::Base
   	else
   		super
   	end
+  end
+
+  def facebook
+    @facebook ||= Koala::Facebook::API.new(oauth_token) 
   end
 end
